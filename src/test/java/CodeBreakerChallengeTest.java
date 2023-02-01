@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 public class CodeBreakerChallengeTest extends PagesCreation {
 
     @Test
-    public void breakingCode(){
+    public void resolveChallenge(){
         codeBreakerChallenge.waitForHoverBoard();
         codeBreakerChallenge.getHackButton(driver);
         codeBreakerChallenge.clickHackButton();

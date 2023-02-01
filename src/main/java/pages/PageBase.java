@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -43,6 +44,11 @@ abstract class PageBase {
     }
 
     public void waitToBeInvisible(WebElement element){wait.until(ExpectedConditions.invisibilityOf(element));}
+
+    public void moveToElement(WebElement element, WebDriver driver){
+        Actions action = new Actions(driver);
+        action.moveToElement(element).perform();
+    }
 
     public WebElement getRandomElement(List<WebElement> elements) {
         Random random = new Random();

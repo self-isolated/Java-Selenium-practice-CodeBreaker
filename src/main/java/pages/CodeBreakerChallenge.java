@@ -73,8 +73,7 @@ public class CodeBreakerChallenge extends PageBase {
     }
 
     public void getHackButton(WebDriver driver) {
-        Actions action = new Actions(driver);
-        action.moveToElement(flexHackButton).perform();
+        moveToElement(flexHackButton,driver);
     }
 
     public void waitForHoverBoard() {
