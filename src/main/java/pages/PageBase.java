@@ -29,10 +29,14 @@ abstract class PageBase {
     public void sendKeysWithClear(WebElement element, String textToSend) {
         System.out.println("Clearing field");
         element.clear();
-        sendKeys(element, textToSend);
+        element.sendKeys(textToSend);
     }
     public void waitToBeVisible(By by){
         wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+    }
+
+    public void waitToBeVisible(WebElement element){
+        wait.until(ExpectedConditions.visibilityOf(element));
     }
 
     public void waitToBePresent(By by){
@@ -41,6 +45,10 @@ abstract class PageBase {
 
     public void waitToBeClickable(By by){
         wait.until(ExpectedConditions.elementToBeClickable(by));
+    }
+
+    public void waitToBeClickable(WebElement element){
+        wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
     public void waitToBeInvisible(WebElement element){wait.until(ExpectedConditions.invisibilityOf(element));}

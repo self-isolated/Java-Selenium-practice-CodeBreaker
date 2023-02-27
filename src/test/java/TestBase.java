@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
 public class TestBase {
     public WebDriver driver;
     String url="https://hack.ainfosec.com/";
@@ -18,7 +19,7 @@ public class TestBase {
         driver.get(url);
     }
     @AfterEach
-    public void turnOff() {
+    public void tearDown() {
         driver.quit();
     }
 

@@ -1,18 +1,36 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import java.util.HashMap;
+
 
 public class CodeBreakerChallenge extends PageBase {
     public CodeBreakerChallenge(WebDriver driver) {
         super(driver);
+        boardTexts=new HashMap<String,String>();
+        prepareTexts();
+    }
+
+    public String properText(String element){
+        return boardTexts.get(element);
+    }
+
+    private HashMap <String,String>boardTexts;
+
+    private void prepareTexts(){
+        boardTexts.put("firstTextofBoard","150\nPOINTS");
+        boardTexts.put("titleOfBoard","Code Breaker");
+        boardTexts.put("subtitleOfBoard","Break the alpha-numeric...");
+        boardTexts.put("textOfHackButton","HACK!");
+        boardTexts.put("descriptionOfChallenge","Break the alpha-numeric code like in spy movies. Each guess returns a score. The higher the score the more characters you have correct and in the correct position.");
+        boardTexts.put("descriptionOfCodeInput","Submit your guesses (code is 7 alpha-numeric characters long).");
+        boardTexts.put("textOfSolvedLabel","SOLVED!!");
     }
 
     @FindBy(xpath = "//h1[contains(text(),'150')]/../..")
-    private WebElement flexHackButton;
+    private WebElement flexBoard;
     @FindBy(xpath = "//h4[contains(text(),'Code Breaker')]/..//button[last()]")
     private WebElement hackButton;
 
@@ -37,61 +55,98 @@ public class CodeBreakerChallenge extends PageBase {
     @FindBy(xpath = "//h5[contains(text(),'Code Breaker')]/../../div[2]//strong")
     private WebElement solvedLabel;
 
-    public String getTextOfSolvedLabel() {
+    @FindBy(xpath = "//h1[contains(text(),'150')]/..")
+    private WebElement firstTextOfBoard;
+
+    @FindBy(xpath = "//h1[contains(text(),'150')]/../../following-sibling::div//h4")
+    private WebElement titleOfBoard;
+
+    @FindBy(xpath = "//h1[contains(text(),'150')]/../../following-sibling::div//h6")
+    private WebElement subtitleOfBoard;
+
+    @FindBy(xpath = "//h5[contains(text(),'Code Breaker')]/../../*[2]/p")
+    private WebElement descriptionOfChallenge;
+
+    @FindBy(xpath = "//h5[contains(text(),'Code Breaker')]/../../*[2]/p[3]")
+    private WebElement descriptionOfCodeInput;
+
+    public String descriptionOfCodeInput(){
+        return descriptionOfCodeInput.getText();
+    }
+
+    public String descriptionOfChallenge(){
+        return descriptionOfChallenge.getText();
+    }
+
+    public String titleOfBoard(){
+        return titleOfBoard.getText();
+    }
+
+    public String subtitleOfBoard(){
+        return subtitleOfBoard.getText();
+    }
+
+    public String textOfHackButton(){
+        return hackButton.getText();
+    }
+
+    public boolean visibilityOfSolvedLabel() {
+        return solvedLabel.isDisplayed();
+    }
+    public String textOfSolvedLabel() {
         return solvedLabel.getText();
     }
 
     public String getValidationText() {
-        waitToBeVisible(By.xpath("//h5[contains(text(),'Code Breaker')]/../../*[last()]/*[2]"));
+        waitToBeVisible(firstValidationAlert);
         return firstValidationAlert.getText();
     }
 
     public String getScoreText() {
-        waitToBeVisible(By.xpath("//h5[contains(text(),'Code Breaker')]/../../*[last()]/*[3]"));
+        waitToBeVisible(secondScoreAlert);
         return secondScoreAlert.getText();
     }
 
     public void closeAlerts() {
-        waitToBeVisible(By.xpath("//h5[contains(text(),'Code Breaker')]/../../*[last()]/*[3]/button[last()]"));
+        waitToBeVisible(closeScoreAlertButton);
         click(closeValidationAlertButton);
         click(closeScoreAlertButton);
     }
 
     public void closeValidationAlert() {
-        waitToBeVisible(By.xpath("//h5[contains(text(),'Code Breaker')]/../../*[last()]/*[2]/button[last()]"));
+        waitToBeVisible(closeValidationAlertButton);
         click(closeValidationAlertButton);
     }
 
     public void closeScoreAlert() {
-        waitToBeVisible(By.xpath("//h5[contains(text(),'Code Breaker')]/../../*[last()]/*[3]/button[last()]"));
+        waitToBeVisible(closeScoreAlertButton);
         click(closeScoreAlertButton);
     }
 
     public void clickHackButton() {
-        waitToBeVisible(By.xpath("//h4[contains(text(),'Code Breaker')]/..//button[last()]"));
+        waitToBeVisible(hackButton);
         click(hackButton);
     }
 
-    public void getHackButton(WebDriver driver) {
-        moveToElement(flexHackButton,driver);
+    public void showHackButton(WebDriver driver) {
+        moveToElement(flexBoard,driver);
     }
-
+    public String firstTextofBoard(){
+        return firstTextOfBoard.getText();
+    }
     public void waitForHoverBoard() {
-        waitToBeVisible(By.xpath("//h1[contains(text(),'150')]/../.."));
+        waitToBeVisible(flexBoard);
     }
-
     public void waitForCodeInput() {
-        waitToBeVisible(By.xpath("//h5[contains(text(),'Code Breaker')]/../../*[2]//input"));
-    }
+        waitToBeVisible(codeInput);}
 
     public void sendCode(String code) {
         sendKeys(codeInput, code);
     }
 
     public void clickSubmitButton() {
-        waitToBeClickable(By.xpath("//h5[contains(text(),'Code Breaker')]/../../*[last()]/button"));
+        waitToBeClickable(submitCodeButton);
         click(submitCodeButton);
-
     }
 
     public void checkClear() {
@@ -99,7 +154,7 @@ public class CodeBreakerChallenge extends PageBase {
         waitToBeInvisible(secondScoreAlert);
     }
 
-    private String actualScoreText = "Wrong. Score is 0\n" + "×";
+    private String actualScoreText = "Wrong. Score is 0\n×";
 
     public String getActualScoreText() {
         return actualScoreText;
@@ -121,9 +176,9 @@ public class CodeBreakerChallenge extends PageBase {
     public void breakingCode(int firstDecASCINum,int lastDecASCINum) {
 
         while (getBrokenCode().length() < 7) {
-            for (int q = firstDecASCINum; q <= lastDecASCINum; q++) {
-                char j = (char) q;
-                String code = getBrokenCode() + j;
+            for (int i = firstDecASCINum; i <= lastDecASCINum; i++) {
+                char charCode = (char) i;
+                String code = getBrokenCode() + charCode;
                 sendCode(code);
                 checkClear();
                 clickSubmitButton();
@@ -137,12 +192,11 @@ public class CodeBreakerChallenge extends PageBase {
                     if (code.length()==7) {
                         setBrokenCode(code);
                     }else {
-                        System.out.println("Program nie odnalazl wartosci wyniku na stronie dla dlugosci kodu innej niz 7");
+                        System.out.println("Program nie odnalazl wartosci wyniku na stronie dla dlugosci kodu innej niz 7 lub innny problem");
                     }
                     break;
                 }
-                if (getBrokenCode().length()<7){
-                    closeAlerts();
+                closeAlerts();
                 }
 
             }
@@ -151,7 +205,7 @@ public class CodeBreakerChallenge extends PageBase {
 
     }
 
-}
+
 
 
 
