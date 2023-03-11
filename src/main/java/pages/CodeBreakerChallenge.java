@@ -4,22 +4,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class CodeBreakerChallenge extends PageBase {
+
     public CodeBreakerChallenge(WebDriver driver) {
         super(driver);
-        boardTexts=new HashMap<String,String>();
-        prepareTexts();
     }
+    private static Map <String,String>boardTexts;
 
-    public String properText(String element){
-        return boardTexts.get(element);
-    }
-
-    private HashMap <String,String>boardTexts;
-
-    private void prepareTexts(){
+    static {
+        boardTexts=new HashMap<>();
         boardTexts.put("firstTextofBoard","150\nPOINTS");
         boardTexts.put("titleOfBoard","Code Breaker");
         boardTexts.put("subtitleOfBoard","Break the alpha-numeric...");
@@ -27,6 +23,9 @@ public class CodeBreakerChallenge extends PageBase {
         boardTexts.put("descriptionOfChallenge","Break the alpha-numeric code like in spy movies. Each guess returns a score. The higher the score the more characters you have correct and in the correct position.");
         boardTexts.put("descriptionOfCodeInput","Submit your guesses (code is 7 alpha-numeric characters long).");
         boardTexts.put("textOfSolvedLabel","SOLVED!!");
+    }
+    public static String properText(String element){
+        return boardTexts.get(element);
     }
 
     @FindBy(xpath = "//h1[contains(text(),'150')]/../..")
